@@ -74,8 +74,8 @@ const listUser = async () => {
                                     </select>
                                 </td>
                                 <td class="px-6 py-4 flex">
-                                    <Icon name="solar:lock-password-bold" @click="isOpenPassword = true, keyPassword++, userData = user" class="text-gray-500 cursor-pointer hover:text-orange-500 h-10 mr-2" />
                                     <Icon name="material-symbols:edit-square" @click="isOpen = true, key++, userData = user" class="text-gray-500 cursor-pointer hover:text-orange-500 h-10 mr-2" />
+                                    <Icon name="solar:lock-password-bold" @click="isOpenPassword = true, keyPassword++, userData = user" class="text-gray-500 cursor-pointer hover:text-orange-500 h-10 mr-2" />
                                     <Icon name="material-symbols:delete-rounded" @click="isOpenDelete = true, keyDelete++, userData = user" class="text-gray-500 cursor-pointer hover:text-orange-500 h-10 mr-2" />
                                 </td>
                             </tr>
