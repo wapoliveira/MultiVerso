@@ -1,0 +1,82 @@
+datasource db {
+  provider = "mysql" // ou o provedor do seu banco de dados (por exemplo, mysql, sqlite)
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                   Int         @id @default(autoincrement())
+  name                 String
+  email                String      @unique
+  emailVerifiedAt      DateTime?   
+  role                 String      @default("user")
+  password             String
+  rememberToken        String?    
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  // Relacionamentos
+  news                 News[]
+  comments             Comment[]
+}
+
+model Category {
+  id         Int      @id @default(autoincrement())
+  name       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relacionamento
+  news       News[]
+}
+
+model News {
+  id          Int       @id @default(autoincrement())
+  title       String
+  content     String    @db.Text  // Atualizado para armazenar grandes volumes de texto
+  image       String
+  status      NewsStatus @default(pending)
+  categoryId  Int
+  userId      Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relacionamentos
+  category    Category  @relation(fields: [categoryId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+  comments    Comment[] @relation(onDelete: Cascade)
+  viewNews   ViewNews[] @relation(onDelete: Cascade)
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  newsId    Int
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  news      News   @relation(fields: [newsId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
+}
+
+model ViewNews {
+  id        Int      @id @default(autoincrement())
+  newsId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamentos
+  news      News   @relation(fields: [newsId], references: [id])
+}
+
+
+enum NewsStatus {
+  pending
+  approved
+  rejected
+}
